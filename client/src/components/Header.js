@@ -8,7 +8,7 @@ import {
 import 'semantic-ui-css/semantic.min.css';
 import { menuStyle, fixedMenuStyle } from "../helpers/styleHelper";
 
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 class Header extends Component {
     state = {
@@ -36,11 +36,11 @@ class Header extends Component {
                         style={menuFixed ? fixedMenuStyle : menuStyle}
                     >
                     <Container text>
-                        <Menu.Item>
-                        <Image size='mini' src='https://react.semantic-ui.com/logo.png' />
+                        <Menu.Item as={ Link } to="/" exact="true">
+                            <Image size='mini' src='https://react.semantic-ui.com/logo.png' />
+                            <Menu.Item header>MovieApp</Menu.Item>
                         </Menu.Item>
-                        <Menu.Item header>MovieApp</Menu.Item>
-                        <Menu.Item as={Link} to="movies">Movies</Menu.Item>
+                        <Menu.Item as={ NavLink } to="/movies">Movies</Menu.Item>
                         <Menu.Item as='a'>Add Movie</Menu.Item>
 
                     </Container>
