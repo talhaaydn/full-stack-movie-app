@@ -7,6 +7,7 @@ import { Route } from "react-router-dom";
 
 import Header from "./components/Header";
 import MoviesPage from "./components/pages/MoviesPage";
+import NewMoviePage from "./components/pages/NewMoviePage";
 
 class App extends Component {
   
@@ -18,6 +19,7 @@ class App extends Component {
 
         <Container text>
           <Route path="/movies" component={MoviesPage}></Route>          
+          <Route path="/new-movie" component={NewMoviePage}></Route>          
         </Container>
       </div>
     );
