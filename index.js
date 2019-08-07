@@ -1,10 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+var cors = require('cors');
 const app = express();
 
 // BodyParser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(cors());
 
 // Connect all routes
 app.use('/api', require('./routes/movie'));

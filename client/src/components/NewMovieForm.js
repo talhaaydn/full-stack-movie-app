@@ -6,13 +6,25 @@ import InlineError from "./InlineError";
 
 class NewMovieForm extends Component {
     state = {
-        title: '',
-        cover: '',
+        id: this.props.movie ? this.props.movie.id : '',
+        title: this.props.movie ? this.props.movie.title : '',
+        cover: this.props.movie ? this.props.movie.cover : '',
         errors: {}
     };
 
     static propTypes = {
         onNewMovieSubmit: PropTypes.func.isRequired
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { id, title, cover } = nextProps.newMovie.movie;
+        if(id && this.state.id !== id ){
+            this.setState({
+                id: id,
+                title: title,
+                cover: cover
+            })
+        }
     }
 
     onChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -32,10 +44,16 @@ class NewMovieForm extends Component {
         const errors = this.validate(this.state);
         this.setState({ errors });
 
+        const id = this.state.id || this.props.newMovie.movie.id;
+
         if(Object.keys(errors).length === 0){
-            this.props.onNewMovieSubmit(this.state);
-            this.setState({ title: '', cover: '' });
-            
+            if(!id){
+                this.props.onNewMovieSubmit(this.state);
+                this.setState({ title: '', cover: '' });
+            }
+            else if(id){
+                this.props.onUpdateMovieSubmit({ ...this.state, id });
+            }            
         }
     }    
 
@@ -50,7 +68,7 @@ class NewMovieForm extends Component {
                         <p>A problem has occurred</p>
                     </Message>
                 }                           
-                <Form onSubmit={this.onSubmit} loading={this.props.newMovie.fetching}>
+                <Form onSubmit={this.onSubmit} loading={ this.props.newMovie.fetching  || this.props.newMovie.movie.fetching }>
                     <Form.Field>
                         <label>Title</label>                        
                         <input
