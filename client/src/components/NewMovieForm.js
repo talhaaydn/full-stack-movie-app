@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Button, Form, Image } from 'semantic-ui-react';
+import { Button, Form, Image, Message } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 
 import InlineError from "./InlineError";
 
@@ -10,14 +11,11 @@ class NewMovieForm extends Component {
         errors: {}
     };
 
-    onChange = e => this.setState({ [e.target.name]: e.target.value });
-
-    onSubmit = e => {
-        e.preventDefault();
-
-        const errors = this.validate(this.state);
-        this.setState({ errors });
+    static propTypes = {
+        onNewMovieSubmit: PropTypes.func.isRequired
     }
+
+    onChange = e => this.setState({ [e.target.name]: e.target.value });
 
     validate = (data) => {
         const {title, cover} = data;
@@ -28,12 +26,31 @@ class NewMovieForm extends Component {
         return errors;
     }
 
+    onSubmit = e => {
+        e.preventDefault();
+
+        const errors = this.validate(this.state);
+        this.setState({ errors });
+
+        if(Object.keys(errors).length === 0){
+            this.props.onNewMovieSubmit(this.state);
+            this.setState({ title: '', cover: '' });
+            
+        }
+    }    
+
     render() {
         const { errors } = this.state;
-
         return(
-            <div>                
-                <Form onSubmit={this.onSubmit}>
+            <div>     
+                {
+                    this.props.newMovie.error.response &&
+                    <Message negative>
+                        <Message.Header>We're Sorry</Message.Header>
+                        <p>A problem has occurred</p>
+                    </Message>
+                }                           
+                <Form onSubmit={this.onSubmit} loading={this.props.newMovie.fetching}>
                     <Form.Field>
                         <label>Title</label>                        
                         <input
@@ -57,6 +74,7 @@ class NewMovieForm extends Component {
                     </Form.Field>
                     <Button type='submit'>Submit</Button>
                 </Form>
+                
             </div>
         )
     }
