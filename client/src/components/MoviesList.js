@@ -7,7 +7,7 @@ import MovieCard from "./MovieCard";
 import { loadingBarStyle } from "../helpers/styleHelper";
 
 const MoviesList = props => {
-    const { movies } = props;
+    const { movies, deleteMovie } = props;
 
     const emptyMessage = (
         <p>There are no movies yet.</p>
@@ -24,7 +24,7 @@ const MoviesList = props => {
                 movies.error.response ? 
                     <p>Error! We can't show movies.</p> : 
                     <Grid stackable columns={3}>
-                        { movies.movies.map(movie => <MovieCard key={movie.id} movie={movie} /> ) }
+                        { movies.movies.map(movie => <MovieCard key={movie.id} movie={movie} deleteMovie={deleteMovie} /> ) }
                     </Grid>
             }
         </div>
